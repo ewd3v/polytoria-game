@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Mesh = Godot.Mesh;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection.Metadata;
 
 namespace Polytoria.Shared;
 
@@ -278,10 +279,13 @@ public sealed partial class Globals : Node
 	}
 
 #if CREATOR
-	public static IProperty LoadProperty(Type type)
+	public static IProperty LoadProperty(Type type, string? overridePropertyType = null)
 	{
 		string cacheToLoad;
-		if (type.IsEnum)
+
+		if (overridePropertyType != null)
+			cacheToLoad = overridePropertyType;
+		else if (type.IsEnum)
 			cacheToLoad = "Enum";
 		else if (type.IsAssignableTo(typeof(BaseAsset)))
 			cacheToLoad = "BaseAsset";
